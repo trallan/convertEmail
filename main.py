@@ -4,9 +4,9 @@ import os
 import re
 from datetime import datetime, timedelta
 # outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-# msg = outlook.OpenSharedItem(r"C:\Users\SveaUser\Desktop\ConvertEmail\test.msg")
+# msg = outlook.OpenSharedItem(r"FILE LOCATION PATH")
 
-msg_directory = r"C:\Users\SveaUser\Desktop\ConvertEmail\emails"
+msg_directory = r"FILE PATH"
 msg_files = [file for file in os.listdir(msg_directory) if file.endswith(".msg")]
 phone_number_pattern = r"\b(?:\+\d{1,2}\s)?\(?(?:\d{3}[-.\s]?\d{7}|\d{3}[-.\s]?\d{3}[-.\s]?\d{4})\b"
 
@@ -28,14 +28,14 @@ with open('output.csv', 'w', newline='') as file:
 
         lower_body = msg.Body.lower()
 
-        contains_svea = any(keyword in lower_body for keyword in ['svea inkasso', 'sveainkasso', 'svea bank', 'sveabank'])
+        contains_word = any(keyword in lower_body for keyword in ["LIST OF WORDS"])
         
         if len(phone_numbers) > 1:
-            writer.writerow([sender_name, sent_date_time, phone_numbers[0], phone_numbers[1], contains_svea])
+            writer.writerow([sender_name, sent_date_time, phone_numbers[0], phone_numbers[1], contains_word])
         elif len(phone_numbers) == 1:
-            writer.writerow([sender_name, sent_date_time, phone_numbers[0], '', contains_svea])
+            writer.writerow([sender_name, sent_date_time, phone_numbers[0], '', contains_word])
         else:
-            writer.writerow([sender_name, sent_date_time, '', '', contains_svea])
+            writer.writerow([sender_name, sent_date_time, '', '', contains_word])
 
         # Closing the message object after you're done with it
         del outlook, msg
